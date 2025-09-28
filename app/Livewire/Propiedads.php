@@ -148,8 +148,9 @@ class Propiedads extends Component
             $this->previousPage();
         }
 
-
     }
+
+
 
     public function render()
     {
