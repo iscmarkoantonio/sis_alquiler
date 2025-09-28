@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Inquilino;
 use App\Models\Propiedad;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -16,7 +17,10 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
         Propiedad::factory(50)->create();
+        Inquilino::factory(50)->create();
        
+
+
         User::create([
             'name' => 'Admin',
             'email' => 'iscmarko@hotmail.com',
