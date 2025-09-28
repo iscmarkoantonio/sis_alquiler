@@ -13,7 +13,7 @@ class Propiedads extends Component
 
     protected $paginationTheme = 'tailwind';
 
-    //campos del formulario
+    //campos del formulario de creacion
 
     public $tipo;
     public $direccion;
@@ -21,8 +21,20 @@ class Propiedads extends Component
     public $descripcion;
     public $estado = 'disponible';
 
+    //campos del formulario de edicion
+
+    public $editTipo;
+    public $editDireccion;
+    public $editPrecio;
+    public $editDescripcion;
+    public $editEstado;
+
+    //control de modales
+    public $createModal = false;
     public $showModal = false;
+    public $editModal = false;
     public $propiedadSeleccionada;
+    public $propiedadEditando;
 
     //reglas de validacion
     protected $rules =[
@@ -33,16 +45,30 @@ class Propiedads extends Component
     'estado' => 'required|in:disponible,alquilado,mantenimiento',
     ];
 
-    //recetar campos del formulario
-    public function resetForm()
+    //resetear campos del formulario de creacion
+    public function resetCreateForm()
     {
-        $this->tipo = '';
-        $this->direccion = '';
-        $this->precio = '';
-        $this->descripcion = '';
-        $this->estado = '';
+        $this->reset(['tipo', 'direccion', 'precio', 'descripcion', 'estado']);
+        $this->resetErrorBag();
     }
 
+     //resetear campos del formulario de edicion
+    public function resetEditForm()
+    {
+        $this->reset(['editTipo', 'editDireccion', 'editPrecio', 'editDescripcion', 'editEstado', 'propiedadEditando']);
+        $this->resetErrorBag();
+    }
+
+    //abrir modal de creacion
+    public function openCreateModal()
+    {
+        $this->resetCreateForm();
+        // Flux::modal('crear-propiedad')->open();
+        $this->createModal = true;
+    }
+
+
+    //Guardar nueva propiedad
     public function save()
     {
         $this->validate();
@@ -54,8 +80,9 @@ class Propiedads extends Component
             'descripcion' => $this->descripcion,
             'estado' => $this->estado,
         ]);
-        $this->resetForm();
+        $this->resetCreateForm();
         Flux::modal('crear-propiedad')->close();
+        $this->createModal = false;
         session()->flash('message', 'Propiedad creada exitosamente.');
     }
 
@@ -63,6 +90,41 @@ class Propiedads extends Component
     {
         $this->propiedadSeleccionada = Propiedad::find($id);
         $this->showModal = true;
+    }
+
+    public function edit($id)
+    {
+        $this->propiedadEditando = Propiedad::find($id);
+        $this->editTipo = $this->propiedadEditando->tipo;
+        $this->editDireccion = $this->propiedadEditando->direccion;
+        $this->editPrecio = $this->propiedadEditando->precio;
+        $this->editDescripcion = $this->propiedadEditando->descripcion;
+        $this->editEstado = $this->propiedadEditando->estado;
+
+        $this->editModal = true;
+    }
+
+    public function update()
+    {
+        $this->validate([
+            'editTipo' => 'required|string|max:255',
+            'editDireccion' => 'required|string|max:255',
+            'editPrecio' => 'required|numeric|min:0',
+            'editDescripcion' => 'required|string|max:1000',
+            'editEstado' => 'required|in:disponible,alquilado,mantenimiento',
+        ]);
+
+        $this->propiedadEditando->update([
+            'tipo' => $this->editTipo,
+            'direccion' => $this->editDireccion,
+            'precio' => $this->editPrecio,
+            'descripcion' => $this->editDescripcion,
+            'estado' => $this->editEstado,
+        ]);
+
+        $this->resetEditForm();
+        $this->editModal = false;
+        session()->flash('message', 'Propiedad actualizada exitosamente');
     }
 
     public function render()
