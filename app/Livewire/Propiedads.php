@@ -33,8 +33,10 @@ class Propiedads extends Component
     public $createModal = false;
     public $showModal = false;
     public $editModal = false;
+    public $deleteModal = false;
     public $propiedadSeleccionada;
     public $propiedadEditando;
+    public $propiedadEliminar;
 
     //reglas de validacion
     protected $rules =[
@@ -125,6 +127,28 @@ class Propiedads extends Component
         $this->resetEditForm();
         $this->editModal = false;
         session()->flash('message', 'Propiedad actualizada exitosamente');
+    }
+
+    public function confirmDelete($id)
+    {
+        $this->propiedadEliminar = Propiedad::find($id);
+        $this->deleteModal = true;
+    }
+
+    public function delete()
+    {
+        $propiedad = Propiedad::find($this->propiedadEliminar->id);
+        $propiedad->delete();
+        $this->deleteModal = false;
+        $this->propiedadEliminar = null;
+        session()->flash('message', 'propiedad eliminada exitosamente');
+
+        $propiedades = Propiedad::paginate(10);
+        if($propiedades->isEmpty() && $this->page > 1){
+            $this->previousPage();
+        }
+
+
     }
 
     public function render()

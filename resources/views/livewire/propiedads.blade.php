@@ -53,12 +53,12 @@
             <tbody class="divide-y divide-outline dark:divide-outline-dark">
                 @foreach ($propiedades as $propiedad)
                     <tr>
-                        <td class="p-4 text-center">{{ $propiedad->id }}</td>
+                        <td class="py-3 px-4" style="text-align:center">{{ $propiedad->id }}</td>
                         <td class="p-4">{{ $propiedad->tipo }}</td>
                         <td class="p-4">{{ $propiedad->direccion }}</td>
                         <td class="p-4">{{ $propiedad->precio }}</td>
                         <td class="p-4">{{ $propiedad->estado }}</td>
-                        <td class="p-4">
+                        <td class="flex space-x-2">
                             <!-- primary Button Show with Icon -->
                             <button wire:click="show({{ $propiedad->id }})"
                                 class="inline-flex justify-center items-center gap-2 whitespace-nowrap rounded-radius bg-primary border border-primary dark:border-primary-dark px-4 py-2 text-sm font-medium tracking-wide text-on-primary transition hover:opacity-75 text-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary active:opacity-100 active:outline-offset-0 disabled:opacity-75 disabled:cursor-not-allowed dark:bg-primary-dark dark:text-on-primary-dark dark:focus-visible:outline-primary-dark">
@@ -84,7 +84,13 @@
                                 Edit
                             </button>
 
-                            {{-- <flux:button wire:click="show({{ $propiedad->id }})">ver</flux:button> --}}
+
+                            {{-- <flux:button variant="primary" color="blue" wire:click="show({{ $propiedad->id }})">Ver
+                            </flux:button>
+                            <flux:button variant="filled" wire:click="edit({{ $propiedad->id }})">Editar</flux:button> --}}
+                            <flux:button variant="primary" color="red"
+                                wire:click="confirmDelete({{ $propiedad->id }})">
+                                Borrar</flux:button>
                         </td>
                     </tr>
                 @endforeach
@@ -282,6 +288,26 @@
         </div>
     </flux:modal>
 
+    {{-- Modal para la confirmacion  de borrado de propiedad --}}
+
+    <flux:modal name="delete-propiedad" class="min-w-[22rem]" wire:model="deleteModal">
+        <div class="space-y-6">
+            <div>
+                <flux:heading size="lg">¿Eliminar registro?</flux:heading>
+                <flux:text class="mt-2">
+                    <p>Estas a punto de eliminar esta propiedad.</p>
+                    <p>Esta accion no se puede deshacer.</p>
+                </flux:text>
+            </div>
+            <div class="flex gap-2">
+                <flux:spacer />
+                <flux:modal.close>
+                    <flux:button variant="ghost">Cancelar</flux:button>
+                </flux:modal.close>
+                <flux:button type="submit" wire:click="delete" variant="danger">Eliminar registro</flux:button>
+            </div>
+        </div>
+    </flux:modal>
 
 
     @if (session('message'))
