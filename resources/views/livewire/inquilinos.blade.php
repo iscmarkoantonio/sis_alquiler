@@ -79,6 +79,9 @@
                             Editar
                         </button>
 
+                        <flux:button variant="primary" color="red" wire:click="confirmDelete({{ $inquilino->id }})">
+                            Borrar</flux:button>
+
 
                     </td>
                 </tr>
@@ -271,6 +274,27 @@
         </div>
     </flux:modal>
 
+
+    {{-- Modal para la confirmacion  de borrado de inquilinos --}}
+
+    <flux:modal name="delete-inquilino" class="min-w-[22rem]" wire:model="deleteModal">
+        <div class="space-y-6">
+            <div>
+                <flux:heading size="lg">¿Eliminar registro?</flux:heading>
+                <flux:text class="mt-2">
+                    <p>Estas a punto de eliminar este inquilino.</p>
+                    <p>Esta accion no se puede deshacer.</p>
+                </flux:text>
+            </div>
+            <div class="flex gap-2">
+                <flux:spacer />
+                <flux:modal.close name="delete-inquilino" class="mr-2">
+                    <flux:button type="button" variant="filled">Cerrar</flux:button>
+                </flux:modal.close>
+                <flux:button type="submit" wire:click="delete" variant="danger">Eliminar registro</flux:button>
+            </div>
+        </div>
+    </flux:modal>
 
     @if (session('message'))
         <div x-data x-init="Swal.fire({

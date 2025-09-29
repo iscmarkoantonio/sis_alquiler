@@ -26,6 +26,10 @@
                     wire:navigate>{{ __('Inquilinos') }}
                 </flux:navlist.item>
 
+                <flux:navlist.item icon="home" :href="route('contratos')" :current="request()->routeIs('dashboard')"
+                    wire:navigate>{{ __('Contratos') }}
+                </flux:navlist.item>
+
             </flux:navlist.group>
         </flux:navlist>
 

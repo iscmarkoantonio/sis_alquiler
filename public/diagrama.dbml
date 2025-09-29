@@ -17,3 +17,14 @@ Table inquilinos {
     documento_identidad varchar(50)
 
 }
+
+Table contratos {
+    id int[pk, increment]
+    propiedad_id int[ref: > propiedades.id]
+    inquilino_id int[ref: > inquilinos.id]
+    fecha_inicio date
+    fecha_fin date
+    monto_renta date
+    estado varchar(50)
+
+}

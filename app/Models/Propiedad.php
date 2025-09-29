@@ -19,4 +19,9 @@ class Propiedad extends Model
         'descripcion',
         'estado',
     ];  
+
+    public function contratos()
+    {
+        return $this->hasMany(Contrato::class);
+    }
 }
