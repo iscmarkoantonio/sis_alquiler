@@ -81,6 +81,14 @@ class Inquilinos extends Component
         session()->flash('message', 'Inquilino creado exitosamente.');
     }
 
+    //mostrar detalles del inquilino
+    public function show($id)
+    {
+        $this->inquilinoSeleccionado = Inquilino::findOrFail($id);
+        $this->showModal = true;
+    }
+
+
     public function render()
     {
 

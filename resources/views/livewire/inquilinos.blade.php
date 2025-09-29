@@ -55,6 +55,19 @@
                     <td class="p-4 text-center">{{ $inquilino->fecha_nacimiento }}</td>
                     <td class="p-4 text-center">{{ $inquilino->documento_identidad }}</td>
                     <td class="flex space-x-2">
+                        <!-- primary Button Show with Icon -->
+                        <button wire:click="show({{ $inquilino->id }})"
+                            class="inline-flex justify-center items-center gap-2 whitespace-nowrap rounded-radius bg-primary border border-primary dark:border-primary-dark px-4 py-2 text-sm font-medium tracking-wide text-on-primary transition hover:opacity-75 text-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary active:opacity-100 active:outline-offset-0 disabled:opacity-75 disabled:cursor-not-allowed dark:bg-primary-dark dark:text-on-primary-dark dark:focus-visible:outline-primary-dark">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="lucide lucide-eye-icon lucide-eye">
+                                <path
+                                    d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                            Ver
+                        </button>
+
 
                     </td>
                 </tr>
@@ -70,12 +83,13 @@
 
 
     {{-- Modal para la vista create inquilinos --}}
-    <flux:modal name="create-inquilinos" class="md:w-96" style="width: 600px" wire:model="createModal">
+    <flux:modal name="create-inquilino" class="md:w-96" style="width: 600px" wire:model="createModal">
         <div class="space-y-6">
-            {{-- <div>
-            <flux:heading size="lg">Crear nuevo.</flux:heading>
-            <flux:text class="mt-2">Llene todos los campos requeridos.</flux:text>
-        </div> --}}
+            <div>
+                <flux:heading size="lg">Crear nuevo.</flux:heading>
+                <flux:text class="mt-2">Llene todos los campos requeridos.</flux:text>
+            </div>
+
             <form wire:submit.prevent="save" class="space-y-4">
                 <div>
                     <flux:label for="nombres">Nombres <b>(*)</b></flux:label>
@@ -130,6 +144,57 @@
         </div>
     </flux:modal>
 
+
+
+    {{-- Modal para la vista show inquilinos --}}
+    <flux:modal name="show-inquilino" class="md:w-96" style="width: 600px" wire:model="showModal">
+        <div class="space-y-6">
+            <div>
+                <flux:heading size="lg">Datos del inquilino.</flux:heading>
+                <flux:text class="mt-2">Datos registrados.</flux:text>
+            </div>
+
+
+            @if ($inquilinoSeleccionado)
+                <div>
+                    <flux:label for="nombres">Nombres</flux:label>
+                    <p>{{ $inquilinoSeleccionado->nombres }}</p>
+                </div>
+
+                <div>
+                    <flux:label for="email">Email</flux:label>
+                    <p>{{ $inquilinoSeleccionado->email }}</p>
+                </div>
+
+                <div>
+                    <flux:label for="telefono">Telefono</flux:label>
+                    <p>{{ $inquilinoSeleccionado->telefono }}</p>
+                </div>
+
+                <div>
+                    <flux:label for="fecha_nacimiento">Fecha de nacimiento</flux:label>
+                    <p>{{ $inquilinoSeleccionado->fecha_nacimiento }}</p>
+                </div>
+
+                <div>
+                    <flux:label for="documento_identidad">Documento de identidad</flux:label>
+                    <p>{{ $inquilinoSeleccionado->documento_identidad }}</p>
+                </div>
+            @endif
+
+
+            <br><br>
+
+            <div class="flex justify-end">
+                <flux:modal.close name="show-inquilino" class="mr-2">
+                    <flux:button type="button" variant="filled">Cerrar</flux:button>
+                </flux:modal.close>
+
+            </div>
+
+
+        </div>
+    </flux:modal>
 
     @if (session('message'))
         <div x-data x-init="Swal.fire({
