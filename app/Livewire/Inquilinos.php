@@ -88,6 +88,44 @@ class Inquilinos extends Component
         $this->showModal = true;
     }
 
+    //editar detalles del inquilino
+     public function edit($id)
+    {
+        $this->inquilinoEditando = Inquilino::find($id);
+        $this->editNombres = $this->inquilinoEditando->nombres;
+        $this->editEmail = $this->inquilinoEditando->email;
+        $this->editTelefono = $this->inquilinoEditando->telefono;
+        $this->editFechaNacimiento = $this->inquilinoEditando->fecha_nacimiento;
+        $this->editDocumentoIdentidad = $this->inquilinoEditando->documento_identidad;
+
+        $this->editModal = true;
+    }
+     //reglas de validacion
+    public function update()
+    {
+        $this->validate([
+            'editNombres' => 'required|string|max:255',
+            'editEmail' => 'required|email|max:255|unique:inquilinos,email',
+            'editTelefono' => 'required|string|max:20',
+            'editFechaNacimiento' => 'required|date',
+            'editDocumentoIdentidad' => 'required|string|max:20|unique:inquilinos,documento_identidad',
+        ]);
+
+        $this->inquilinoEditando->update([
+            'nombres' => $this->editNombres,
+            'email' => $this->editEmail,
+            'telefono' => $this->editTelefono,
+            'fecha_nacimiento' => $this->editFechaNacimiento,
+            'documento_identidad' => $this->editDocumentoIdentidad,
+        ]);
+
+        //resetear campos del formulario de edicion
+        $this->resetEditForm();
+        $this->editModal = false;
+        session()->flash('message', 'Inquilino actualizado exitosamente');
+    }
+
+
 
     public function render()
     {

@@ -68,6 +68,17 @@
                             Ver
                         </button>
 
+                        <!-- primary Button Edit with Icon -->
+                        <button wire:click="edit({{ $inquilino->id }})"
+                            class="inline-flex justify-center items-center gap-2 whitespace-nowrap rounded-radius bg-surface-alt border border-surface-alt dark:border-surface-dark-alt px-4 py-2 text-xs font-medium tracking-wide text-on-surface-strong transition hover:opacity-75 text-center focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-surface-alt active:opacity-100 active:outline-offset-0 disabled:opacity-75 disabled:cursor-not-allowed dark:bg-surface-dark-alt dark:text-on-surface-dark-strong dark:focus-visible:outline-surface-dark-alt">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                stroke-width="1.5" stroke="currentColor" class="size-4">
+                                <path stroke-linecap="round" stroke-linejoin="round"
+                                    d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125" />
+                            </svg>
+                            Editar
+                        </button>
+
 
                     </td>
                 </tr>
@@ -195,6 +206,71 @@
 
         </div>
     </flux:modal>
+
+
+    {{-- Modal para la vista edicion inquilino --}}
+    <flux:modal name="edit-inquilino" class="md:w-96" style="width: 600px" wire:model="editModal">
+        <div class="space-y-6">
+            <div>
+                <flux:heading size="lg">Editar inquilino</flux:heading>
+                <flux:text class="mt-2">Llene todos los campos requeridos.</flux:text>
+            </div>
+            <form wire:submit.prevent="update" class="space-y-4">
+                <div>
+                    <flux:label for="nombres">Nombres <b>(*)</b></flux:label>
+                    <flux:input type="text" id="nombres" wire:model="editNombres" required />
+                    @error('nombres')
+                        <span class="tex-red-500">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div>
+                    <flux:label for="email">Email <b>(*)</b></flux:label>
+                    <flux:input type="text" id="email" wire:model="editEmail" required />
+                    @error('email')
+                        <span class="tex-red-500">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div>
+                    <flux:label for="telefono">Telefono <b>(*)</b></flux:label>
+                    <flux:input type="text" id="telefono" wire:model="editTelefono" required />
+                    @error('telefono')
+                        <span class="tex-red-500">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div>
+                    <flux:label for="fecha_nacimiento">Fecha de nacimiento <b>(*)</b></flux:label>
+                    <flux:input type="date" id="fecha_nacimiento" wire:model="editFechaNacimiento" required />
+                    @error('fecha_nacimiento')
+                        <span class="tex-red-500">{{ $message }}</span>
+                    @enderror
+                </div>
+
+                <div>
+                    <flux:label for="documento_identidad">Documento de identidad <b>(*)</b></flux:label>
+                    <flux:input type="text" id="documento_identidad" wire:model="editDocumentoIdentidad"
+                        required />
+                    @error('documento_identidad')
+                        <span class="tex-red-500">{{ $message }}</span>
+                    @enderror
+                </div>
+
+
+                <br>
+                <br>
+
+                <div class="flex justify-end">
+                    <flux:modal.close name="edit-inquilino" class="mr-2">
+                        <flux:button type="button" variant="filled">Cerrar</flux:button>
+                    </flux:modal.close>
+                    <flux:button type="submit" variant="primary">Actualizar Inquilino</flux:button>
+                </div>
+            </form>
+        </div>
+    </flux:modal>
+
 
     @if (session('message'))
         <div x-data x-init="Swal.fire({
